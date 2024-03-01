@@ -52,6 +52,7 @@ class Customer {
 
     return new Customer(customer);
   }
+  
 
   /** get all reservations for this customer. */
 
@@ -78,6 +79,11 @@ class Customer {
       );
     }
   }
+
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
+
 }
 
 module.exports = Customer;

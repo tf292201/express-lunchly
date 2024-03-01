@@ -79,6 +79,21 @@ class Customer {
       );
     }
   }
+  
+  static async search(searchTerm){
+    const results = await db.query(
+      `SELECT id, 
+         first_name AS "firstName",  
+         last_name AS "lastName", 
+         phone, 
+         notes
+       FROM customers
+       WHERE first_name ILIKE $1 OR last_name ILIKE $1
+       ORDER BY last_name, first_name`,
+       [`%${searchTerm}%`]
+    );
+    return results.rows.map(c => new Customer(c));
+  }
 
   get fullName() {
     return `${this.firstName} ${this.lastName}`;

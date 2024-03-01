@@ -26,6 +26,7 @@ class Customer {
        FROM customers
        ORDER BY last_name, first_name`
     );
+    console.log(results.rows);
     return results.rows.map(c => new Customer(c));
   }
 
@@ -94,8 +95,32 @@ class Customer {
     );
     return results.rows.map(c => new Customer(c));
   }
-
-  get fullName() {
+  
+  static async topCustomers(){
+    const results = await db.query(
+      `SELECT 
+          customers.id, 
+          customers.first_name AS "firstName",  
+          customers.last_name AS "lastName", 
+          customers.phone, 
+          customers.notes AS "customerNotes", -- Specify the table alias for the notes column in the customers table
+          COUNT(reservations.id) AS "reservations"
+        FROM 
+          customers
+        JOIN 
+          reservations ON customers.id = reservations.customer_id
+        GROUP BY 
+          customers.id
+        ORDER BY 
+          reservations DESC
+        LIMIT 
+          10`
+    );
+    console.log(results.rows);
+    return results.rows.map(c => new Customer(c));
+  }
+  
+  get fullName(){
     return `${this.firstName} ${this.lastName}`;
   }
 

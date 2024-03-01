@@ -28,6 +28,14 @@ router.post("/", async function(req, res, next) {
   }
 });
 
+router.get("/best/", async function(req, res, next) {
+  try {
+    const customers = await Customer.topCustomers();
+    return res.render("best_list.html", { customers });
+  } catch (err) {
+    return next(err);
+  }
+});
 /** Form to add a new customer. */
 
 router.get("/add/", async function(req, res, next) {
@@ -121,5 +129,7 @@ router.post("/:id/add-reservation/", async function(req, res, next) {
     return next(err);
   }
 });
+
+
 
 module.exports = router;
